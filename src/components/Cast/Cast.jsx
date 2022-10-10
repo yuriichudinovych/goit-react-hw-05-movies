@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { useParams, Link, Outlet } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getMovieCast } from 'services/api';
 
 export const Cast = () => {

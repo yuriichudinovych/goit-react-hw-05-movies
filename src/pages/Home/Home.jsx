@@ -1,4 +1,4 @@
-import { fetchTrending, fetchMovieDetails } from '../../services/api';
+import { fetchTrending } from '../../services/api';
 import { useState, useEffect } from 'react';
 
 import { MoviesList } from 'components/MoviesList/MoviesList';
@@ -6,7 +6,7 @@ import { MoviesList } from 'components/MoviesList/MoviesList';
 const Home = () => {
   const [trandigMovies, settrandingMovies] = useState([]);
   const [error, setError] = useState(null);
-  const [movie, setMovie] = useState([]);
+  // const [movie, setMovie] = useState([]);
 
   useEffect(() => {
     async function fetchTrandingMovies() {
@@ -22,13 +22,18 @@ const Home = () => {
     }
     fetchTrandingMovies();
   }, []);
-  const handleClickMovie = async (e, key) => {
-    e.preventDefault();
-    const data = await fetchMovieDetails(key);
-    setMovie(() => data);
-  };
+  // const handleClickMovie = async (e, key) => {
+  //   e.preventDefault();
+  // const data = await fetchMovieDetails(key);
+  // setMovie(() => data);
+  // };
 
-  return <MoviesList movieItems={trandigMovies} />;
+  return (
+    <>
+      <MoviesList movieItems={trandigMovies} />
+      {error && <p>{error}</p>}
+    </>
+  );
 };
 
 export default Home;

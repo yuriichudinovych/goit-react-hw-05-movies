@@ -20,7 +20,7 @@ const MovieDetails = () => {
 
   const { original_title, genres, release_date, overview, vote_average } =
     movieInfo;
-
+  console.log(genres);
   const releaseYear = Number.parseInt(release_date);
 
   return (
@@ -32,10 +32,17 @@ const MovieDetails = () => {
           <h2>
             {original_title} ({releaseYear})
           </h2>
-          <p> Vote average: {vote_average} </p>
+          <p>Vote average: {vote_average} </p>
           <h3>overview</h3>
 
           <p>{overview}</p>
+          <h3>Geres</h3>
+          <ul>
+            {genres &&
+              genres.map(({ id, name }) => {
+                return <li key={id}>{name}</li>;
+              })}
+          </ul>
         </div>
       </div>
       <div>
