@@ -36,7 +36,25 @@ export const searchMovies = async query => {
 export const fetchMovieDetails = async movie_id => {
   const { data } = await instance.get(`/movie/${movie_id}`, {
     params: {
-      language: 'en - US',
+      language: 'en-US',
+    },
+  });
+  return data;
+};
+
+export const getMovieCast = async movie_id => {
+  const { data } = await instance.get(`/movie/${movie_id}/credits`, {
+    params: {
+      language: 'en-US',
+    },
+  });
+  return data;
+};
+
+export const getMovieReviews = async movie_id => {
+  const { data } = await instance.get(`/movie/${movie_id}/reviews`, {
+    params: {
+      language: 'en-US',
     },
   });
   return data;
