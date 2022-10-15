@@ -35,7 +35,7 @@ const MovieDetails = () => {
         setMovieInfo(data);
         setCardImgUrl('https://image.tmdb.org/t/p/w342' + data.poster_path);
       } catch (error) {
-        console.log(error);
+        console.log(error.message);
       }
     };
     fetchMovie();
