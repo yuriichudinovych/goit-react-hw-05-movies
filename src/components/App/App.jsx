@@ -1,15 +1,28 @@
 import { Routes, Route } from 'react-router-dom';
-
+import { lazy } from 'react';
 import Home from '../../pages/Home';
-import { Cast } from 'components/Cast/Cast';
-import { Reviews } from 'components/Reviews/Reviews';
 import { Layout } from '../Layout/Layout';
-import Movies from '../../pages/Movies/Movies';
-import MovieDetails from '../MovieDetails';
+import { Navigate } from 'react-router-dom';
+
+const Movies = lazy(() => import('../../pages/Movies/Movies'));
+const MovieDetails = lazy(() => import('../MovieDetails'));
+const Cast = lazy(() =>
+  import('components/Cast/Cast').then(module => ({
+    ...module,
+    default: module.Cast,
+  }))
+);
+
+const Reviews = lazy(() =>
+  import('components/Reviews/Reviews').then(module => ({
+    ...module,
+    default: module.Reviews,
+  }))
+);
 
 export const App = () => {
   return (
-    <Routes>
+    <Routes className="dkfdsfk">
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="movies" element={<Movies />} />
@@ -18,7 +31,7 @@ export const App = () => {
           <Route path="reviews" element={<Reviews />}></Route>
         </Route>
       </Route>
-      <Route path="*" element={<p>Not found!</p>} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

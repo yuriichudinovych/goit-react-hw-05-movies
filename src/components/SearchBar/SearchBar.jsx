@@ -1,35 +1,12 @@
-import { useState } from 'react';
-import { searchMovies } from '../../services/api';
+import { SearchForm, SearchBtn, SearchInput } from './SearchBar.styled';
 
-export const SearchBar = () => {
-  const [searchValue, setSearchValue] = useState('');
-
-  const handleChangeSearch = e => {
-    setSearchValue(e.currentTarget.value.toLowerCase());
-  };
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    async function getMovies(movie) {
-      const data = await searchMovies(movie);
-      console.log(data);
-      return data;
-    }
-    getMovies(searchValue);
-    setSearchValue('');
-  };
-
+export const SearchBar = ({ onSubmit, onChange }) => {
   return (
-    <form onSubmit={handleSubmit}>
+    <SearchForm onSubmit={onSubmit}>
       <label htmlFor="">
-        <input
-          type="text"
-          name="name"
-          onChange={handleChangeSearch}
-          value={searchValue}
-        />
+        <SearchInput type="text" name="name" />
       </label>
-      <button type="submit">Search</button>
-    </form>
+      <SearchBtn type="submit">Search</SearchBtn>
+    </SearchForm>
   );
 };

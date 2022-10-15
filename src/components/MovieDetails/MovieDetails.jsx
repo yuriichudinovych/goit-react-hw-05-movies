@@ -1,63 +1,96 @@
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useState } from 'react';
-import { useParams, Link, Outlet } from 'react-router-dom';
+import { useParams, useLocation, Outlet } from 'react-router-dom';
 import { fetchMovieDetails } from 'services/api';
+import { FaArrowLeft } from 'react-icons/fa';
+
+import {
+  MoviesDetails,
+  CardWrapper,
+  DescriptionContainer,
+  LinkItem,
+  LinkItemGoBack,
+  MovieTitle,
+  MovieDesc,
+  SubTitle,
+  GenresList,
+  GenreItem,
+  LinkItemReviews,
+  AdditionalList,
+} from './MovieDetails.styled';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
 
   const [movieInfo, setMovieInfo] = useState([]);
   const [cardImgUrl, setCardImgUrl] = useState('');
+  const location = useLocation();
+
+  const backLinkHref = location.state ? location.state.from : '/';
 
   useEffect(() => {
     const fetchMovie = async () => {
-      const data = await fetchMovieDetails(movieId);
-      setMovieInfo(data);
-      setCardImgUrl('https://image.tmdb.org/t/p/w342' + data.poster_path);
+      try {
+        const data = await fetchMovieDetails(movieId);
+        setMovieInfo(data);
+        setCardImgUrl('https://image.tmdb.org/t/p/w342' + data.poster_path);
+      } catch (error) {
+        console.log(error);
+      }
     };
     fetchMovie();
   }, [movieId]);
 
   const { original_title, genres, release_date, overview, vote_average } =
     movieInfo;
-  console.log(genres);
   const releaseYear = Number.parseInt(release_date);
 
   return (
-    <>
-      <div display="flex">
+    <MoviesDetails>
+      <LinkItemGoBack to={backLinkHref}>
+        <FaArrowLeft />
+        Go back
+      </LinkItemGoBack>
+      <CardWrapper>
         <img src={cardImgUrl} alt={original_title} />
 
-        <div>
-          <h2>
+        <DescriptionContainer>
+          <MovieTitle>
             {original_title} ({releaseYear})
-          </h2>
-          <p>Vote average: {vote_average} </p>
-          <h3>overview</h3>
-
-          <p>{overview}</p>
-          <h3>Geres</h3>
-          <ul>
+          </MovieTitle>
+          <MovieDesc>
+            Vote average: {Number(vote_average).toFixed(1)}{' '}
+          </MovieDesc>
+          <SubTitle>Overview</SubTitle>
+          <MovieDesc>{overview}</MovieDesc>
+          <SubTitle>Geres</SubTitle>
+          <GenresList>
             {genres &&
               genres.map(({ id, name }) => {
-                return <li key={id}>{name}</li>;
+                return <GenreItem key={id}>{name}</GenreItem>;
               })}
-          </ul>
-        </div>
-      </div>
+          </GenresList>
+        </DescriptionContainer>
+      </CardWrapper>
       <div>
-        <h2>Additional information</h2>
-        <ul>
+        <SubTitle>Additional information</SubTitle>
+        <AdditionalList>
           <li>
-            <Link to="cast">Cast</Link>
+            <LinkItem to="cast" state={{ from: backLinkHref }}>
+              Cast
+            </LinkItem>
           </li>
           <li>
-            <Link to="reviews">Reviews</Link>
+            <LinkItemReviews to="reviews" state={{ from: backLinkHref }}>
+              Reviews
+            </LinkItemReviews>
           </li>
-        </ul>
-        <Outlet />
+        </AdditionalList>
+        <Suspense>
+          <Outlet />
+        </Suspense>
       </div>
-    </>
+    </MoviesDetails>
   );
 };
 
