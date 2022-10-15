@@ -19,7 +19,7 @@ export const Cast = () => {
 
   const createImgUrl = profile_path => {
     if (!profile_path) {
-      return '/public/logo512.png';
+      return;
     }
     return 'https://image.tmdb.org/t/p/w342' + profile_path;
   };
